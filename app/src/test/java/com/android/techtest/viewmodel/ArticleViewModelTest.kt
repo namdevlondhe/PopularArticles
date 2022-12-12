@@ -2,12 +2,16 @@ package com.android.techtest.viewmodel
 
 import android.app.Application
 import com.android.techtest.ArticleApplication
+import com.android.techtest.model.ArticleResponse
 import com.android.techtest.repository.ArticleRepository
 import com.android.techtest.util.FileUtils.getJson
 import com.android.techtest.util.NetworkHelper
+import com.android.techtest.util.Resource
 import org.junit.Assert
 import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
 import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
 
 class ArticleViewModelTest {
@@ -16,11 +20,18 @@ class ArticleViewModelTest {
     val application: Application = Mockito.mock(ArticleApplication::class.java)
     private val viewModel:ArticleViewModel = ArticleViewModel(mArticleRepository,mNetworkHelper,application)
 
+    @BeforeAll
+    private fun doOnBeforeAll() {
+        MockitoAnnotations.openMocks(this)
+    }
     @Test
     fun fetchArticleListTestSuccess(){
-        val skeletonResponse = getJson("json/ArticleResults.json")
-        val articleViewState = viewModel.fetchArticleList()
-        Assert.assertEquals(skeletonResponse,articleViewState)
+        var skeletonResponse:Resource<ArticleResponse>? = null
+        viewModel.fetchArticleList()
+        viewModel.aList.observeForever {
+            skeletonResponse = it
+        }
+        Assert.assertNotNull(skeletonResponse)
     }
 
     @Test

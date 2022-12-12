@@ -40,13 +40,10 @@ class ArticleListAdapter(val viewModel: ArticleViewModel, val listener: OnArticl
             binding.txtByLine.text = item.byline
             binding.txtDate.text = " "+item.publishedDate
             binding.txtSource.text = item.section
-            if(!item.media.isNullOrEmpty() && !item.media.get(0).mediaMetadata.isNullOrEmpty()){
+            if(item.media.isNotEmpty() && item.media[0].mediaMetadata.isNotEmpty()){
                 Glide.with(binding.imageView.context)
-                    .load(Uri.parse(item.media.get(0).mediaMetadata.get(0).url))
-                    .into(binding.imageView)
-            }else{
-                Glide.with(binding.imageView.context)
-                    .load(binding.imageView.context.getDrawable(R.drawable.ic_launcher_foreground))
+                    .load(Uri.parse(item.media[0].mediaMetadata[0].url))
+                    .placeholder(binding.imageView.context.getDrawable(R.drawable.ic_launcher_foreground))
                     .into(binding.imageView)
             }
             binding.container.setOnClickListener {

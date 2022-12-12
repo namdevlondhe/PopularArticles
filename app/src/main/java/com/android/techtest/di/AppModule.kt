@@ -25,7 +25,7 @@ val appModule = module {
 
     }
     // single instance of HelloRepository
-    single<ArticleRepository> { ArticleRepositoryImpl(get()) }
+    single<ArticleRepository> { ArticleRepositoryImpl(get(), get()) }
     single { provideNetworkHelper(androidContext()) }
 
     viewModel { ArticleViewModel(get(),get(),get()) }

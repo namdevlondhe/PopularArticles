@@ -13,35 +13,25 @@ import kotlinx.coroutines.launch
 class ArticleViewModel(
     private val mArticleRepository: ArticleRepository,
     private val mNetworkHelper: NetworkHelper, application: Application
-) :AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
-    var period:Int = 7
+    var period: Int = 7
 
     private val mList = MutableLiveData<Resource<ArticleResponse>>()
     val aList: LiveData<Resource<ArticleResponse>> get() = mList
 
-    lateinit var dataItem:Result
+    lateinit var dataItem: Result
 
-    fun fetchArticleList(): String? {
-        var response:String? = null
+    fun fetchArticleList() {
         viewModelScope.launch {
             mList.postValue(Resource.loading(null))
-            if (mNetworkHelper.isNetworkConnected()) {
-                mArticleRepository.getArticleList(period).let {
-                    if (it.isSuccessful) {
-                        mList.postValue(Resource.success(it.body()))
-                        response = it.body().toString()
-                    } else {
-                        mList.postValue(Resource.error(it.errorBody().toString(), null))
-                        response = it.errorBody().toString()
-                    }
-                }
-            } else {
-                mList.postValue(Resource.error(getApplication<Application>().applicationContext.getString(R.string.str_connection_error), null))
-                response =getApplication<Application>().applicationContext.getString(R.string.str_connection_error)
+            mArticleRepository.getArticleList(
+                getApplication<Application>().applicationContext,
+                period
+            ).let {
+                mList.postValue(it)
             }
         }
-        return response
     }
 
     fun setCurrentArticle(item: Result) {

@@ -56,12 +56,15 @@ class MostPopularArticleListFragment() : Fragment(),ArticleListAdapter.OnArticle
                     binding.txtNoData.visibility = View.GONE
                     adapter.updateData(it.data?.results ?: listOf())
                     binding.recArticle.visibility = View.VISIBLE
+                    binding.progressbar.visibility = View.GONE
                 }
                 Status.LOADING -> {
+                    binding.progressbar.visibility = View.VISIBLE
                 }
                 Status.ERROR -> {
                     //Handle Error
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                    binding.progressbar.visibility = View.GONE
                 }
             }
         }

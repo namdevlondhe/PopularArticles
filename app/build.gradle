@@ -41,7 +41,9 @@ android {
     aaptOptions {
         noCompress "json"
     }
-
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -92,6 +94,8 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
+
 
     // Scalable SDP
     implementation "com.intuit.sdp:sdp-android:$sdp"
@@ -107,5 +111,6 @@ dependencies {
     androidTestImplementation 'androidx.android.espresso:espresso-core:3.5.0'
     // optional - Test helpers for LiveData
     testImplementation("androidx.arch.core:core-testing:$arch_version")
+
 
 }

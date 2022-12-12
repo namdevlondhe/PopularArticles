@@ -24,7 +24,7 @@ A simple app to hit the NY Times Most Popular Articles API and show a list of ar
 
 ## License
 ```
-   Copyright (C) 2022 Mayuresh Deshmukh
+   Copyright (C) 2022 Namdev Londhe
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

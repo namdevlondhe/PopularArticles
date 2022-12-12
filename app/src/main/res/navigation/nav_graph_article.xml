@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_article"
+    app:startDestination="@id/mostPopulerArticleListFragment">
+
+    <fragment
+        android:id="@+id/mostPopulerArticleListFragment"
+        android:name="com.android.techtest.ui.fragment.MostPopularArticleListFragment"
+        android:label="Most Popular Articles" >
+        <action
+            android:id="@+id/action_mostPopulerArticleListFragment_to_articleDetailsFragment"
+            app:destination="@id/articleDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleDetailsFragment"
+        android:name="com.android.techtest.ui.fragment.ArticleDetailsFragment"
+        android:label="" />
+</navigation>

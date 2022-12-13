@@ -8,15 +8,16 @@ API used - https://api.nytimes.com/
     <img src="screenshot2.png" width="250"/>
 </p>
 <br>
-##This Project showcases :
-1. MVVM architecture
-2. Room Database
-3. Retrofit
-4. Glide
-5. Navigation
-6. DataBinding
-7. Kotlin Coroutines
-8. Notification
+## This Project showcases :
+1. MVVM architecture.
+2. Room Database.
+3. Retrofit.
+4. Glide.
+5. Navigation.
+6. DataBinding.
+7. Kotlin Coroutines.
+8. Notification.
+<br>
 
 ## The app has following packages:
 1. **model**: request response classes mention here.

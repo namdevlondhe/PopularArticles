@@ -8,22 +8,28 @@ API used - https://api.nytimes.com/
     <img src="screenshot2.png" width="250"/>
 </p>
 <br>
-## This Project showcases :
+    
+## This Project showcases:
 1. MVVM architecture.
-2. Room Database.
-3. Retrofit.
-4. Glide.
-5. Navigation.
-6. DataBinding.
-7. Kotlin Coroutines.
-8. Notification.
+2. SharedViewModel.
+3. Unit test cases.
+4. Retrofit.
+5. Glide.
+6. Navigation.
+7. DataBinding.
+8. Kotlin Coroutines.
+9. Notification.
 <br>
 
 ## The app has following packages:
 1. **model**: request response classes mention here.
-2. **di**: Dependency mention here.
-4. **ui**: View classes.
-5. **utils**: Utility classes.
+2. **viewmodel**: data provider
+3. **repository**: provide a clean API for accessing data
+4. **di**: Dependency mention here.
+5. **api**: details of api end point
+6. **dependencyinjection**: provides dependency injections
+7. **ui**: View classes.
+8. **utils**: Utility classes.
 <br>
 
 ## If you see java 11 error then do following steps

@@ -19,6 +19,7 @@ API used - https://api.nytimes.com/
 7. DataBinding.
 8. Kotlin Coroutines.
 9. Notification.
+10. Mockito.
 <br>
 
 ## The app has following packages:

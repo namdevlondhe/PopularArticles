@@ -7,7 +7,6 @@ import com.android.techtest.api.ApiService
 import com.android.techtest.model.ArticleResponse
 import com.android.techtest.util.NetworkHelper
 import com.android.techtest.util.Resource
-import retrofit2.Response
 
 interface ArticleRepository {
    suspend fun getArticleList(context: Context,period:Int):Resource<ArticleResponse>

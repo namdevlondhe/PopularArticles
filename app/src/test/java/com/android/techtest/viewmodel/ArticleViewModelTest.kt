@@ -12,7 +12,9 @@ import com.android.techtest.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.*
 import org.junit.jupiter.api.BeforeAll
@@ -45,7 +47,7 @@ class ArticleViewModelTest {
     }
 
     @Test
-    fun fetchArticleListTestSuccess(){
+    fun fetchArticleListTestSuccess()= runTest(UnconfinedTestDispatcher()){
         var skeletonResponse:Resource<ArticleResponse>? = null
         viewModel.fetchArticleList()
         viewModel.aList.observeForever {
@@ -55,7 +57,7 @@ class ArticleViewModelTest {
     }
 
     @Test
-    fun fetchArticleListTestFailed(){
+    fun fetchArticleListTestFailed() = runTest(UnconfinedTestDispatcher()){
         var skeletonResponse :Resource<ArticleResponse>? = null
         viewModel.period = 0
         viewModel.fetchArticleList()

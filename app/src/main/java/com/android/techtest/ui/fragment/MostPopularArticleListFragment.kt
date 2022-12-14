@@ -10,14 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.techtest.R
-import com.android.techtest.ui.adapter.ArticleListAdapter
 import com.android.techtest.databinding.FragmentMostPopulerArticleListBinding
 import com.android.techtest.model.Result
+import com.android.techtest.ui.adapter.ArticleListAdapter
 import com.android.techtest.util.Status
 import com.android.techtest.viewmodel.ArticleViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class MostPopularArticleListFragment() : Fragment(),ArticleListAdapter.OnArticleClickListener {
+class MostPopularArticleListFragment() : Fragment(), ArticleListAdapter.OnArticleClickListener {
 
     private val viewModel by sharedViewModel<ArticleViewModel>()
 
@@ -29,14 +29,14 @@ class MostPopularArticleListFragment() : Fragment(),ArticleListAdapter.OnArticle
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMostPopulerArticleListBinding.inflate(inflater,container,false)
+        binding = FragmentMostPopulerArticleListBinding.inflate(inflater, container, false)
         init()
         viewModel.fetchArticleList()
         return binding.root
     }
 
-    fun init(){
-        adapter = ArticleListAdapter(viewModel,this)
+    fun init() {
+        adapter = ArticleListAdapter(viewModel, this)
         binding.recArticle.adapter = adapter
         val layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.VERTICAL
@@ -50,21 +50,23 @@ class MostPopularArticleListFragment() : Fragment(),ArticleListAdapter.OnArticle
     }
 
     private fun setObserver() {
-        viewModel.aList.observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    binding.txtNoData.visibility = View.GONE
-                    adapter.updateData(it.data?.results ?: listOf())
-                    binding.recArticle.visibility = View.VISIBLE
-                    binding.progressbar.visibility = View.GONE
-                }
-                Status.LOADING -> {
-                    binding.progressbar.visibility = View.VISIBLE
-                }
-                Status.ERROR -> {
-                    //Handle Error
-                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-                    binding.progressbar.visibility = View.GONE
+        with(binding) {
+            viewModel?.aList?.observe(viewLifecycleOwner) {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        txtNoData.visibility = View.GONE
+                        adapter.updateData(it.data?.results ?: listOf())
+                        recArticle.visibility = View.VISIBLE
+                        progressbar.visibility = View.GONE
+                    }
+                    Status.LOADING -> {
+                        progressbar.visibility = View.VISIBLE
+                    }
+                    Status.ERROR -> {
+                        //Handle Error
+                        Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                        progressbar.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -73,6 +75,7 @@ class MostPopularArticleListFragment() : Fragment(),ArticleListAdapter.OnArticle
     override fun onArticleClick(item: Result) {
         Log.d("FRAGMENT=>", " $item")
         viewModel.setCurrentArticle(item)
-        Navigation.findNavController(binding.recArticle).navigate(R.id.action_mostPopulerArticleListFragment_to_articleDetailsFragment)
+        Navigation.findNavController(binding.recArticle)
+            .navigate(R.id.action_mostPopulerArticleListFragment_to_articleDetailsFragment)
     }
 }

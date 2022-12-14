@@ -4,10 +4,10 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.android.techtest.model.ArticleResponse
 import com.android.techtest.model.Media
 import com.android.techtest.util.Resource
+import com.bumptech.glide.Glide
 
 object ArticleView {
     @BindingAdapter("app:items")

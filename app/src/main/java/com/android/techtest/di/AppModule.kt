@@ -28,7 +28,7 @@ val appModule = module {
     single<ArticleRepository> { ArticleRepositoryImpl(get(), get()) }
     single { provideNetworkHelper(androidContext()) }
 
-    viewModel { ArticleViewModel(get(),get(),get()) }
+    viewModel { ArticleViewModel(get(),get()) }
 
 }
 

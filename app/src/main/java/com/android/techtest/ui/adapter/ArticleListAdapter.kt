@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.android.techtest.R
 import com.android.techtest.databinding.ListItemArticalListBinding
 import com.android.techtest.model.Result
 import com.android.techtest.viewmodel.ArticleViewModel
+import com.bumptech.glide.Glide
 
 class ArticleListAdapter(val viewModel: ArticleViewModel, val listener: OnArticleClickListener) : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
 

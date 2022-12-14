@@ -1,18 +1,18 @@
 package com.android.techtest.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.android.techtest.R
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.android.techtest.model.ArticleResponse
 import com.android.techtest.model.Result
 import com.android.techtest.repository.ArticleRepository
-import com.android.techtest.util.NetworkHelper
 import com.android.techtest.util.Resource
 import kotlinx.coroutines.launch
 
 class ArticleViewModel(
-    private val mArticleRepository: ArticleRepository,
-    private val mNetworkHelper: NetworkHelper, application: Application
+    private val mArticleRepository: ArticleRepository, application: Application
 ) : AndroidViewModel(application) {
 
     var period: Int = 7
@@ -25,11 +25,8 @@ class ArticleViewModel(
     fun fetchArticleList() {
         viewModelScope.launch {
             mList.postValue(Resource.loading(null))
-            mArticleRepository.getArticleList(
-                getApplication<Application>().applicationContext,
-                period
-            ).let {
-                mList.postValue(it)
+            mArticleRepository.getArticleList(period).let { response ->
+                mList.postValue(response)
             }
         }
     }

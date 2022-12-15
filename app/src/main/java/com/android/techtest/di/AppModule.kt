@@ -3,7 +3,6 @@ package com.android.techtest.di
 import android.content.Context
 import com.android.techtest.api.ApiService
 import com.android.techtest.repository.ArticleRepository
-import com.android.techtest.repository.ArticleRepositoryImpl
 import com.android.techtest.util.AppConstants
 import com.android.techtest.util.NetworkHelper
 import com.android.techtest.viewmodel.ArticleViewModel
@@ -25,7 +24,7 @@ val appModule = module {
 
     }
     // single instance of HelloRepository
-    single<ArticleRepository> { ArticleRepositoryImpl(get(), get()) }
+    single<ArticleRepository> { ArticleRepository(get(), get()) }
     single { provideNetworkHelper(androidContext()) }
 
     viewModel { ArticleViewModel(get(),get()) }

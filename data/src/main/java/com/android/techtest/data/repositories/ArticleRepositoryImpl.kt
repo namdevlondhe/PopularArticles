@@ -2,7 +2,7 @@ package com.android.techtest.data.repositories
 
 import com.android.techtest.data.service.api.ApiService
 import com.android.techtest.data.util.NetworkHelper
-import com.android.techtest.domain.entities.ArticleResponse
+import com.android.techtest.data.entities.ArticleResponse
 import com.android.techtest.domain.repositories.ArticleRepository
 import com.android.techtest.domain.util.Resource
 

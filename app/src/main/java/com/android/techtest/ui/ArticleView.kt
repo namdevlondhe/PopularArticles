@@ -3,7 +3,7 @@ package com.android.techtest.ui
 import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.android.techtest.domain.entities.Media
+import com.android.techtest.data.entities.Media
 import com.bumptech.glide.Glide
 
 object ArticleView {

@@ -1,7 +1,7 @@
 package com.android.techtest.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.android.techtest.domain.entities.ArticleResponse
+import com.android.techtest.domain.entities.ArticleCharacter
 import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Resource
 import com.android.techtest.domain.util.Status
@@ -13,18 +13,18 @@ import junit.framework.TestCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
-class ArticleViewModelTest  : TestCase() {
-    private lateinit var viewModel:ArticleViewModel
+class ArticleViewModelTest : TestCase() {
+    private lateinit var viewModel: ArticleViewModel
     private val articleUseCases: GetArticleUseCases = mockk()
 
     @get:Rule
@@ -43,43 +43,48 @@ class ArticleViewModelTest  : TestCase() {
     override fun tearDown() {
         Dispatchers.resetMain()
     }
+
     @Test
-    fun `get Article List`() {
-        val response = mockk<Resource<ArticleResponse>>()
+    fun `get Article List`() = runBlocking {
+        val response = mockk<Resource<ArticleCharacter>>()
 
         //1- Mock calls
-        coEvery {
-            articleUseCases.invoke(7)
-        } returns flow {
-            emit(Resource.success(response.data))
-        }
+        launch {
+            coEvery {
+                articleUseCases.invoke(7)
+            } returns flow {
+                emit(Resource.success(response.data))
+            }
 
-        //2-Call
-        viewModel = ArticleViewModel(articleUseCases)
-        viewModel.fetchArticleList()
+            //2-Call
+            viewModel = ArticleViewModel(articleUseCases)
+            viewModel.fetchArticleList()
+        }
         //active observer for livedata
         viewModel.articleList.observeForever {}
 
         //3-verify
         val data = viewModel.articleList.value
-        junit.framework.Assert.assertEquals(data, response)
+        Assert.assertEquals(data, response)
     }
 
     @Test
-    fun `get Article Empty List`() {
-        val response = mockk<Resource<ArticleResponse>>()
-        response.data?.results = emptyList<com.android.techtest.domain.entities.Result>()
+    fun `get Article Empty List`()= runBlocking {
+        val response = mockk<Resource<ArticleCharacter>>()
+        //response.data?.results = emptyList<com.android.techtest.data.entities.Result>()
 
         //1- Mock calls
-        coEvery {
-            articleUseCases.invoke(0)
-        } returns flow {
-            emit(Resource.success(response.data))
-        }
+        launch {
+            coEvery {
+                articleUseCases.invoke(0)
+            } returns flow {
+                emit(Resource.success(response.data))
+            }
 
-        //2-Call
-        viewModel = ArticleViewModel(articleUseCases)
-        viewModel.fetchArticleList()
+            //2-Call
+            viewModel = ArticleViewModel(articleUseCases)
+            viewModel.fetchArticleList()
+        }
         //active observer for livedata
         viewModel.articleList.observeForever {}
 
@@ -91,25 +96,26 @@ class ArticleViewModelTest  : TestCase() {
     }
 
     @Test
-    fun `get Article Error`() {
-        val error = mockk<Resource<ArticleResponse>>()
+    fun `get Article Error`() = runBlocking{
+        val error = mockk<Resource<ArticleCharacter>>()
         error.status = Status.ERROR
         error.message = "Failed"
         //1- Mock calls
-        coEvery {
-            articleUseCases.invoke(0)
-        } returns flow {
-            emit(Resource.error(error.message!!,null))
+        launch {
+            coEvery {
+                articleUseCases.invoke(0)
+            } returns flow {
+                emit(Resource.error(error.message!!, null))
+            }
+
+            //2-Call
+            viewModel = ArticleViewModel(articleUseCases)
+            viewModel.fetchArticleList()
+            //active observer for livedata
+            viewModel.articleList.observeForever {}
         }
-
-        //2-Call
-        viewModel = ArticleViewModel(articleUseCases)
-        viewModel.fetchArticleList()
-        //active observer for livedata
-        viewModel.articleList.observeForever {}
-
         //3-verify
         val data = viewModel.articleList.value
-        Assert.assertEquals(data?.message,"Failed")
+        Assert.assertEquals(data?.message, "Failed")
     }
 }

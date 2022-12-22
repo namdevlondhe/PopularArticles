@@ -1,4 +1,4 @@
-package com.android.techtest.domain.entities
+package com.android.techtest.data.entities
 
 import com.google.gson.annotations.SerializedName
 

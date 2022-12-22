@@ -15,5 +15,5 @@
     <fragment
         android:id="@+id/articleDetailsFragment"
         android:name="com.android.techtest.ui.fragment.ArticleDetailsFragment"
-        android:label="" />
+        android:label="Article Details" />
 </navigation>

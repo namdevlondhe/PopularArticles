@@ -5,7 +5,7 @@
     <data>
         <variable
             name="data"
-            type="com.android.techtest.domain.entities.Result" />
+            type="com.android.techtest.data.entities.Result" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:imageUrl="@{data.media}"
-            android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -54,7 +53,6 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:drawableStart="@drawable/ic_calendar"
             android:textColor="@color/textColorSecondary"
-            android:drawablePadding="@dimen/_5sdp"
             android:text="@{data.publishedDate}"
             app:layout_constraintTop_toBottomOf="@+id/txtByName"
             app:layout_constraintEnd_toEndOf="@id/guideline3"

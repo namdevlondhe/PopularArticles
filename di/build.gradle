@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    def ok_http = '4.7.2'
     def retrofit = '2.9.0'
     // Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit"

@@ -37,7 +37,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     implementation 'com.google.code.gson:gson:2.8.8'
-// optional - Test helpers for LiveData
+    implementation "javax.inject:javax.inject:1"
+    // optional - Test helpers for LiveData
     testImplementation("androidx.arch.core:core-testing:$arch_version")
     //Mockk
     testImplementation 'io.mockk:mockk:1.12.5'

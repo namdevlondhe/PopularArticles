@@ -1,6 +1,6 @@
-package com.example.bookmyshow.repository
+package com.android.techtest.data.repositories
 
-import com.android.techtest.domain.entities.ArticleResponse
+import com.android.techtest.data.entities.ArticleResponse
 import com.android.techtest.domain.repositories.ArticleRepository
 import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Resource
@@ -11,5 +11,5 @@ class FakeRepository(repository:ArticleRepository) : GetArticleUseCases() {
 
     private val flow = MutableSharedFlow<Resource<ArticleResponse>>()
     suspend fun emit(value: Resource<ArticleResponse>) = flow.emit(value)
-    suspend fun getArticles(): Flow<Resource<ArticleResponse>> = flow
+    fun getArticles(): Flow<Resource<ArticleResponse>> = flow
 }

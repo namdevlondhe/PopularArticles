@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.techtest.R
 import com.android.techtest.databinding.ListItemArticalListBinding
-import com.android.techtest.domain.entities.Result
+import com.android.techtest.data.entities.Result
 import com.bumptech.glide.Glide
 
 class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {

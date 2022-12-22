@@ -22,8 +22,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:background="@color/colorPrimary"
             app:titleTextColor="@color/white"
-            app:title="Most Popular Articles"
-            android:backgroundTint="@color/colorPrimary" />
+            app:title="Most Popular Articles" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"

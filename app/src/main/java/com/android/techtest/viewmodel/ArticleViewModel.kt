@@ -1,19 +1,18 @@
 package com.android.techtest.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.android.techtest.domain.entities.ArticleResponse
+import com.android.techtest.data.entities.ArticleResponse
+import com.android.techtest.data.entities.Result
+import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Resource
 import com.android.techtest.util.Constants.PERIOD
 import com.android.techtest.viewmodel.base.BaseViewModel
-import kotlinx.coroutines.launch
-import com.android.techtest.domain.entities.Result
-import com.android.techtest.domain.usecases.GetArticleUseCases
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ArticleViewModel @Inject constructor(
@@ -32,7 +31,7 @@ class ArticleViewModel @Inject constructor(
             }.catch {
                 articleList.value = it.message?.let { it1 -> Resource.error(it1, null) }
             }.collect {
-                articleList.value = Resource.success(it.data)
+                articleList.value = Resource.success(it.data) as Resource<ArticleResponse>?
             }
         }
     }

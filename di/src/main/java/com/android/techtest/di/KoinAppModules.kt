@@ -5,7 +5,6 @@ import com.android.techtest.data.repositories.ArticleRepositoryImpl
 import com.android.techtest.data.service.api.ApiService
 import com.android.techtest.data.util.ApiConstants
 import com.android.techtest.data.util.NetworkHelper
-import com.android.techtest.domain.repositories.ArticleRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -24,7 +23,7 @@ val applicationModule = module {
 
     }
     // single instance of ArticleRepository
-    single { ArticleRepositoryImpl(get(), get()) as ArticleRepository }
+    single { ArticleRepositoryImpl(get(), get()) }
     single { provideNetworkHelper(androidContext()) }
 
 }

@@ -3,17 +3,10 @@ package com.android.techtest.ui
 import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.android.techtest.model.ArticleResponse
-import com.android.techtest.model.Media
-import com.android.techtest.util.Resource
+import com.android.techtest.domain.entities.Media
 import com.bumptech.glide.Glide
 
 object ArticleView {
-    @BindingAdapter("app:items")
-    @JvmStatic fun setItems(recyclerView: RecyclerView, resource: Resource<ArticleResponse>?) {
-
-    }
 
     @BindingAdapter("app:imageUrl")
     @JvmStatic fun loadImage(view: ImageView, list: List<Media>) {

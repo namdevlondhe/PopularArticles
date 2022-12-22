@@ -1,62 +1,115 @@
 package com.android.techtest.viewmodel
 
-import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.android.techtest.ArticleApplication
-import com.android.techtest.model.ArticleResponse
-import com.android.techtest.repository.ArticleRepository
-import com.android.techtest.util.Resource
+import com.android.techtest.domain.entities.ArticleResponse
+import com.android.techtest.domain.usecases.GetArticleUseCases
+import com.android.techtest.domain.util.Resource
+import com.android.techtest.domain.util.Status
+import com.android.techtest.util.MainCoroutineRule
+import io.mockk.coEvery
+import io.mockk.mockk
+import junit.framework.Assert
+import junit.framework.TestCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.*
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.jupiter.api.Test
+import org.junit.runner.RunWith
+import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
-class ArticleViewModelTest {
-    private val mArticleRepository: ArticleRepository = Mockito.mock(ArticleRepository::class.java)
-    private val application: Application = Mockito.mock(ArticleApplication::class.java)
-    private val viewModel:ArticleViewModel = ArticleViewModel(mArticleRepository,application)
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+class ArticleViewModelTest  : TestCase() {
+    private lateinit var viewModel:ArticleViewModel
+    private val articleUseCases: GetArticleUseCases = mockk()
+
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
-        MockitoAnnotations.openMocks(this)
-        Dispatchers.setMain(mainThreadSurrogate)
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
-    fun tearDown() {
+    override fun tearDown() {
         Dispatchers.resetMain()
-        mainThreadSurrogate.close()
+    }
+    @Test
+    fun `get Article List`() {
+        val response = mockk<Resource<ArticleResponse>>()
+
+        //1- Mock calls
+        coEvery {
+            articleUseCases.invoke(7)
+        } returns flow {
+            emit(Resource.success(response.data))
+        }
+
+        //2-Call
+        viewModel = ArticleViewModel(articleUseCases)
+        viewModel.fetchArticleList()
+        //active observer for livedata
+        viewModel.articleList.observeForever {}
+
+        //3-verify
+        val data = viewModel.articleList.value
+        junit.framework.Assert.assertEquals(data, response)
     }
 
     @Test
-    fun fetchArticleListTestSuccess()= runTest(UnconfinedTestDispatcher()){
-        var skeletonResponse:Resource<ArticleResponse>? = null
-        viewModel.fetchArticleList()
-        viewModel.aList.observeForever {
-            skeletonResponse = it
+    fun `get Article Empty List`() {
+        val response = mockk<Resource<ArticleResponse>>()
+        response.data?.results = emptyList<com.android.techtest.domain.entities.Result>()
+
+        //1- Mock calls
+        coEvery {
+            articleUseCases.invoke(0)
+        } returns flow {
+            emit(Resource.success(response.data))
         }
-        Assert.assertNotNull(skeletonResponse)
+
+        //2-Call
+        viewModel = ArticleViewModel(articleUseCases)
+        viewModel.fetchArticleList()
+        //active observer for livedata
+        viewModel.articleList.observeForever {}
+
+        //3-verify
+        val data = viewModel.articleList.value
+        val isEmptyList = data?.data?.results.isNullOrEmpty()
+        assertEquals(data, response)
+        Assert.assertTrue(isEmptyList)
     }
 
     @Test
-    fun fetchArticleListTestFailed() = runTest(UnconfinedTestDispatcher()){
-        var skeletonResponse :Resource<ArticleResponse>? = null
-        viewModel.period = 0
-        viewModel.fetchArticleList()
-        viewModel.aList.observeForever {
-            skeletonResponse = it
+    fun `get Article Error`() {
+        val error = mockk<Resource<ArticleResponse>>()
+        error.status = Status.ERROR
+        error.message = "Failed"
+        //1- Mock calls
+        coEvery {
+            articleUseCases.invoke(0)
+        } returns flow {
+            emit(Resource.error(error.message!!,null))
         }
 
-        Assert.assertNotNull(skeletonResponse.toString(),Resource.error("{\"fault\":{\"faultstring\":\"Failed to resolve API Key variable request.queryparam.api-key\",\"detail\":{\"errorcode\":\"steps.oauth.v2.FailedToResolveAPIKey\"}}}", null))
+        //2-Call
+        viewModel = ArticleViewModel(articleUseCases)
+        viewModel.fetchArticleList()
+        //active observer for livedata
+        viewModel.articleList.observeForever {}
+
+        //3-verify
+        val data = viewModel.articleList.value
+        Assert.assertEquals(data?.message,"Failed")
     }
 }

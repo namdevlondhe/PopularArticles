@@ -51,21 +51,17 @@ android {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
-    testImplementation 'org.mockito:mockito-core:3.11.2'
-    testImplementation "org.mockito:mockito-inline:3.11.2"
-    implementation 'androidx.test:monitor:1.6.0'
-    implementation 'androidx.test.ext:junit-ktx:1.1.4'
-    androidTestImplementation 'junit:junit:4.13.2'
+
     def lifecycle_version = "2.5.0-beta01"
     def arch_version = "2.1.0"
-    def retrofit = '2.9.0'
     def koin_version = '3.2.0-beta-1'
     def navigation = '2.4.2'
     def glide = '4.14.2'
-    def ok_http = '4.7.2'
-    def coroutines = '1.6.0'
+    def coroutines = '1.6.4'
     def sdp = '1.0.6'
+
+    implementation project(path: ':domain')
+    implementation project(path: ':di')
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
@@ -79,26 +75,21 @@ dependencies {
     //koin
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
+
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-//    implementation 'android.arch.lifecycle:extensions:1.1.1'
     // For Images
     implementation "com.github.bumptech.glide:glide:$glide"
-//    // LiveData
+    // LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     // Lifecycles only (without ViewModel or LiveData)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
 
-    // Networking
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
-    implementation 'com.google.code.gson:gson:2.8.8'
-    implementation "com.squareup.okhttp3:okhttp:$ok_http"
-    implementation "com.squareup.okhttp3:logging-interceptor:$ok_http"
-
     // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
+   // testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
 
 
     // Scalable SDP
@@ -110,11 +101,20 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    implementation 'androidx.test:monitor:1.6.0'
+    implementation 'androidx.test.ext:junit-ktx:1.1.4'
     androidTestImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.android.ext:junit:1.1.4'
     androidTestImplementation 'androidx.android.espresso:espresso-core:3.5.0'
     // optional - Test helpers for LiveData
     testImplementation("androidx.arch.core:core-testing:$arch_version")
-
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.6.1'
+    //Mockk
+    testImplementation 'io.mockk:mockk:1.12.5'
+    testImplementation 'org.mockito:mockito-core:3.11.2'
+    testImplementation "org.mockito:mockito-inline:3.11.2"
 
 }

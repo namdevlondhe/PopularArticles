@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MostPopularArticles.iml" filepath="$PROJECT_DIR$/.idea/modules/MostPopularArticles.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MostPopularArticles.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/datta/MostPopularArticles.data.iml" filepath="$PROJECT_DIR$/.idea/modules/datta/MostPopularArticles.data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/MostPopularArticles.data.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/data/MostPopularArticles.data.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/MostPopularArticles.data.main.iml" filepath="$PROJECT_DIR$/.idea/modules/data/MostPopularArticles.data.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/MostPopularArticles.data.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/data/MostPopularArticles.data.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.iml" filepath="$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.main.iml" filepath="$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/di/MostPopularArticles.di.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.main.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/MostPopularArticles.domain.unitTest.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,37 +1,51 @@
 package com.android.techtest.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.android.techtest.model.ArticleResponse
-import com.android.techtest.model.Result
-import com.android.techtest.repository.ArticleRepository
-import com.android.techtest.util.Resource
+import com.android.techtest.domain.entities.ArticleResponse
+import com.android.techtest.domain.util.Resource
+import com.android.techtest.util.Constants.PERIOD
+import com.android.techtest.viewmodel.base.BaseViewModel
 import kotlinx.coroutines.launch
+import com.android.techtest.domain.entities.Result
+import com.android.techtest.domain.usecases.GetArticleUseCases
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
+import javax.inject.Inject
 
-class ArticleViewModel(
-    private val mArticleRepository: ArticleRepository, application: Application
-) : AndroidViewModel(application) {
+class ArticleViewModel @Inject constructor(
+    private val articleUseCases: GetArticleUseCases
+) : BaseViewModel() {
 
-    var period: Int = 7
-
-    private val mList = MutableLiveData<Resource<ArticleResponse>>()
-    val aList: LiveData<Resource<ArticleResponse>> get() = mList
-
+    val articleList = MutableLiveData<Resource<ArticleResponse>>()
     lateinit var dataItem: Result
 
     fun fetchArticleList() {
         viewModelScope.launch {
-            mList.postValue(Resource.loading(null))
-            mArticleRepository.getArticleList(period).let { response ->
-                mList.postValue(response)
+            articleList.postValue(Resource.loading(null))
+
+            articleUseCases.invoke(PERIOD).onStart {
+                articleList.value = Resource.loading(null)
+            }.catch {
+                articleList.value = it.message?.let { it1 -> Resource.error(it1, null) }
+            }.collect {
+                articleList.value = Resource.success(it.data)
             }
         }
     }
 
     fun setCurrentArticle(item: Result) {
         dataItem = item
+    }
+
+    class Factory(
+        private val articleUseCases: GetArticleUseCases
+    ) : ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ArticleViewModel(articleUseCases) as T
+        }
     }
 }

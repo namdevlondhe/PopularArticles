@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.techtest.R
 import com.android.techtest.databinding.ListItemArticalListBinding
-import com.android.techtest.model.Result
-import com.android.techtest.viewmodel.ArticleViewModel
+import com.android.techtest.domain.entities.Result
 import com.bumptech.glide.Glide
 
-class ArticleListAdapter(val viewModel: ArticleViewModel, val listener: OnArticleClickListener) : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
+class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
 
     private val dataList: MutableList<Result> = mutableListOf()
+    var onItemClick: ((Result) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ArticleViewHolder(
         LayoutInflater.from(parent.context)
@@ -47,14 +47,9 @@ class ArticleListAdapter(val viewModel: ArticleViewModel, val listener: OnArticl
                     .into(binding.imageView)
             }
             binding.container.setOnClickListener {
-                listener.onArticleClick(item)
+                onItemClick?.invoke(item)
             }
         }
 
     }
-
-    interface OnArticleClickListener{
-        fun onArticleClick(item: Result)
-    }
-
 }

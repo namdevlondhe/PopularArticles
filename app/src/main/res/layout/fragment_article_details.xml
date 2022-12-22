@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="data"
-            type="com.android.techtest.model.Result" />
+            type="com.android.techtest.domain.entities.Result" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

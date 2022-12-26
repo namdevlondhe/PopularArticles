@@ -4,34 +4,37 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.techtest.domain.entities.ArticleCharacter
 import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Resource
-import com.android.techtest.domain.util.Status
 import com.android.techtest.util.MainCoroutineRule
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import junit.framework.Assert
 import junit.framework.Assert.assertEquals
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
-@RunWith(MockitoJUnitRunner::class)
 class ArticleViewModelTest {
-    @Mock
-    private var viewModel: ArticleViewModel= mockk()
+    @MockK
+    private lateinit var viewModel: ArticleViewModel
 
-    private val articleUseCases: GetArticleUseCases = mockk()
+    private val articleUseCases = mockk<GetArticleUseCases>(relaxed = true)
 
     @ExperimentalCoroutinesApi
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private val testDispatcher = TestCoroutineDispatcher()
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -42,91 +45,90 @@ class ArticleViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Before
-    fun setup()= runBlocking {
-        Dispatchers.setMain(mainThreadSurrogate)
+    fun setup() {
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        Dispatchers.setMain(testDispatcher)
     }
 
     @ExperimentalCoroutinesApi
     @After
-    fun tearDown() = runBlocking{
+    fun tearDown() = runBlocking {
         Dispatchers.resetMain()
-        mainThreadSurrogate.close()
+        testDispatcher.cleanupTestCoroutines()
+        unmockkAll()
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `get Article List`(): Unit = runBlocking {
-        val response = mockk<Resource<ArticleCharacter>>()
-        viewModel = ArticleViewModel(articleUseCases)
+    fun `get Article List`() = runBlockingTest {
+        val response = mockk<Resource<ArticleCharacter>>(relaxed = true)
         launch {
-            viewModel.fetchArticleList()
+            viewModel = ArticleViewModel(articleUseCases)
             //1- Mock calls
-
             coEvery {
+                viewModel.fetchArticleList()
                 articleUseCases.invoke(7)
             } returns flow {
                 emit(Resource.success(response.data!!))
+
+                //2-Call
+
+                //active observer for livedata
+                viewModel.articleList.observeForever {}
+
+                //3-verify
+                val data = viewModel.articleList.value
+                assertEquals(data, response)
             }
-
-            //2-Call
-
-        //active observer for livedata
-        viewModel.articleList.observeForever {}
-
-        //3-verify
-        val data = viewModel.articleList.value
-        assertEquals(data, response)
         }
     }
 
     @Test
-    fun `get Article Empty List`() = runBlocking {
+    fun `get Article Empty List`(): Unit = runBlocking {
         val response = mockk<Resource<ArticleCharacter>>()
-        //response.data?.results = emptyList<com.android.techtest.data.entities.Result>()
-
+        viewModel = ArticleViewModel(articleUseCases)
         //1- Mock calls
         launch {
             coEvery {
                 articleUseCases.invoke(0)
             } returns flow {
                 emit(Resource.success(response.data!!))
+
+                //2-Call
+                viewModel.fetchArticleList()
+
+                //active observer for livedata
+                viewModel.articleList.observeForever {}
+
+                //3-verify
+                val data = viewModel.articleList.value
+                val isEmptyList = data?.data?.results.isNullOrEmpty()
+                assertEquals(data, response)
+                Assert.assertTrue(isEmptyList)
             }
-
-            //2-Call
-            viewModel = ArticleViewModel(articleUseCases)
-            viewModel.fetchArticleList()
         }
-        //active observer for livedata
-        viewModel.articleList.observeForever {}
-
-        //3-verify
-        val data = viewModel.articleList.value
-        val isEmptyList = data?.data?.results.isNullOrEmpty()
-        assertEquals(data, response)
-        Assert.assertTrue(isEmptyList)
     }
 
     @Test
-    fun `get Article Error`() = runBlocking {
+    fun `get Article Error`(): Unit = runBlocking {
         val error = mockk<Resource<ArticleCharacter>>()
-        error.status = Status.ERROR
-        error.message = "Failed"
+        viewModel = ArticleViewModel(articleUseCases)
         //1- Mock calls
         launch {
             coEvery {
                 articleUseCases.invoke(0)
             } returns flow {
                 emit(Resource.error(error.message!!, null))
-            }
 
-            //2-Call
-            viewModel = ArticleViewModel(articleUseCases)
-            viewModel.fetchArticleList()
-            //active observer for livedata
-            viewModel.articleList.observeForever {}
+                //2-Call
+                viewModel.fetchArticleList()
+                //active observer for livedata
+                viewModel.articleList.observeForever {}
+
+                //3-verify
+                val data = viewModel.articleList.value
+                assertEquals(data?.message, null)
+            }
         }
-        //3-verify
-        val data = viewModel.articleList.value
-        Assert.assertEquals(data?.message, "Failed")
     }
 }

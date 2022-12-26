@@ -10,13 +10,10 @@ object ArticleView {
 
     @BindingAdapter("app:imageUrl")
     @JvmStatic fun loadImage(view: ImageView, list: List<Media>) {
-        if(list.isNotEmpty() && list[0].mediaMetadata?.isNotEmpty() == true){
-            val index = list[0].mediaMetadata?.size
-            if (index != null) {
-                Glide.with(view.context)
-                    .load(Uri.parse(list[0].mediaMetadata?.get(index-1)?.url))
-                    .into(view)
-            }
+        if(list.isNotEmpty() && list[0].mediaMetadata.isNotEmpty()){
+            Glide.with(view.context)
+                .load(Uri.parse(list[0].mediaMetadata[list[0].mediaMetadata.size-1].url))
+                .into(view)
         }
     }
 

@@ -8,6 +8,7 @@ import com.android.techtest.domain.entities.ArticleCharacter
 import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Resource
 import com.android.techtest.viewmodel.base.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class ArticleViewModel @Inject constructor(
     val articleList: LiveData<Resource<ArticleCharacter>> = _articleList
 
     fun fetchArticleList() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _articleList.postValue(Resource.loading(null))
 
             articleUseCases().onStart {

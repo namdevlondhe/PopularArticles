@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-class FakeRepository(repository:ArticleRepository, articleRepository: ArticleRepository,
+class FakeRepository(articleRepository: ArticleRepository,
                      ioDispatcher: CoroutineDispatcher
 ) : GetArticleUseCases(
     articleRepository, ioDispatcher

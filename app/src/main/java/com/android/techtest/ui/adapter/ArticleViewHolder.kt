@@ -21,9 +21,9 @@ class ArticleViewHolder(
             txtByLine.text = item.byline
             txtDate.text = " " + item.publishedDate
             txtSource.text = item.section
-            if (item.media?.isNotEmpty() == true && item.media?.get(0)?.mediaMetadata?.isNotEmpty() == true) {
+            if (item.media.isNotEmpty() && item.media[0].mediaMetadata.isNotEmpty()) {
                 Glide.with(imageView.context)
-                    .load(Uri.parse(item.media!![0].mediaMetadata?.get(0)?.url))
+                    .load(Uri.parse(item.media[0].mediaMetadata[0].url))
                     .placeholder(imageView.context.getDrawable(R.drawable.ic_launcher_foreground))
                     .into(imageView)
             }

@@ -5,14 +5,17 @@ import com.android.techtest.data.repositories.ArticleRepositoryImpl
 import com.android.techtest.data.service.api.ApiService
 import com.android.techtest.data.util.ApiConstants
 import com.android.techtest.data.util.NetworkHelper
+import com.android.techtest.domain.repositories.ArticleRepository
+import com.android.techtest.domain.usecases.GetArticleUseCases
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Singleton
-val applicationModule = module {
+val appDomainApiModule = module {
 
     single {
             Retrofit.Builder()
@@ -22,10 +25,13 @@ val applicationModule = module {
                 .create(ApiService::class.java)
 
     }
-    // single instance of ArticleRepository
-    single { ArticleRepositoryImpl(get(), get()) }
-    single { provideNetworkHelper(androidContext()) }
 
+    single { provideNetworkHelper(androidContext()) }
+}
+
+@Singleton
+val appDomainUseCasesModule = module {
+    single { GetArticleUseCases(get(), get(named("IODispatcher"))) }
 }
 
 fun provideNetworkHelper(context: Context) = NetworkHelper(context)

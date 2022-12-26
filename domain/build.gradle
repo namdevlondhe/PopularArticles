@@ -30,8 +30,6 @@ android {
 }
 
 dependencies {
-    def koin_version = '3.2.0-beta-1'
-    def arch_version = "2.1.0"
     implementation 'androidx.core:core-ktx:1.9.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'

@@ -1,55 +1,41 @@
 package com.android.techtest.ui.adapter
 
-import android.net.Uri
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.techtest.R
-import com.android.techtest.databinding.ListItemArticalListBinding
 import com.android.techtest.data.entities.Result
-import com.bumptech.glide.Glide
 
-class ArticleListAdapter : RecyclerView.Adapter<ArticleListAdapter.ArticleViewHolder>() {
+class ArticleListAdapter : RecyclerView.Adapter<ArticleViewHolder>() {
 
-    private val dataList: MutableList<Result> = mutableListOf()
     var onItemClick: ((Result) -> Unit)? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ArticleViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item_artical_list, parent, false))
-
-    override fun getItemCount(): Int = dataList.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ArticleViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(
+                    R.layout.list_item_artical_list,
+                    parent,
+                    false
+                ), onItemClick
+        )
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) =
-        holder.bindTo(dataList[position])
+        holder.bindTo(differ.currentList[position])
 
-    fun updateData(items: List<Result>) {
-        dataList.clear()
-        dataList.addAll(items)
-        notifyDataSetChanged()
-        Log.i("Inside updateData ","" + dataList.size)
-    }
+    override fun getItemCount() = differ.currentList.size
 
-    inner class ArticleViewHolder(parent: View) : RecyclerView.ViewHolder(parent) {
-        private val binding = ListItemArticalListBinding.bind(parent)
+    private val differCallback = object : DiffUtil.ItemCallback<Result>() {
+        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean =
+            oldItem.id == newItem.id
 
-        fun bindTo(item: Result) {
-            binding.txtTitle.text = item.title
-            binding.txtByLine.text = item.byline
-            binding.txtDate.text = " "+item.publishedDate
-            binding.txtSource.text = item.section
-            if(item.media.isNotEmpty() && item.media[0].mediaMetadata.isNotEmpty()){
-                Glide.with(binding.imageView.context)
-                    .load(Uri.parse(item.media[0].mediaMetadata[0].url))
-                    .placeholder(binding.imageView.context.getDrawable(R.drawable.ic_launcher_foreground))
-                    .into(binding.imageView)
-            }
-            binding.container.setOnClickListener {
-                onItemClick?.invoke(item)
-            }
-        }
+        @SuppressLint("DiffUtilEquals")
+        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean =
+            oldItem == newItem
 
     }
+    val differ = AsyncListDiffer(this, differCallback)
 }

@@ -6,20 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.techtest.R
+import com.android.techtest.data.entities.Result
 import com.android.techtest.databinding.FragmentMostPopulerArticleListBinding
-import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Status
 import com.android.techtest.ui.adapter.ArticleListAdapter
+import com.android.techtest.util.Constants.KEY_DETAIL_DATA
+import com.android.techtest.util.ViewUtils.showOrGone
 import com.android.techtest.viewmodel.ArticleViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MostPopularArticleListFragment : Fragment() {
 
-    private lateinit var viewModel: ArticleViewModel
-
+    private val articleViewModel by viewModel<ArticleViewModel>()
     private lateinit var binding: FragmentMostPopulerArticleListBinding
     private lateinit var adapter: ArticleListAdapter
 
@@ -27,23 +28,18 @@ class MostPopularArticleListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMostPopulerArticleListBinding.inflate(inflater, container, false)
-
-        return binding.root
-    }
+    ): View = FragmentMostPopulerArticleListBinding.inflate(
+        inflater,
+        container,
+        false
+    ).also {
+        binding = it
+    }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = requireActivity().run {
-            ViewModelProvider(
-                this,
-                ArticleViewModel.Factory(GetArticleUseCases())
-            )[ArticleViewModel::class.java]
-        }
         init()
-        viewModel.fetchArticleList()
-
+        articleViewModel.fetchArticleList()
     }
 
     private fun init() {
@@ -57,9 +53,13 @@ class MostPopularArticleListFragment : Fragment() {
         }
 
         adapter.onItemClick = { resultItem ->
-            viewModel.setCurrentArticle(resultItem)
+            val bundle = Bundle()
+            bundle.putParcelable(KEY_DETAIL_DATA, resultItem)
             Navigation.findNavController(binding.recArticle)
-                .navigate(R.id.action_mostPopulerArticleListFragment_to_articleDetailsFragment)
+                .navigate(
+                    R.id.action_mostPopulerArticleListFragment_to_articleDetailsFragment,
+                    bundle
+                )
         }
     }
 
@@ -69,26 +69,26 @@ class MostPopularArticleListFragment : Fragment() {
     }
 
     private fun setObserver() {
-        viewModel.articleList.observe(viewLifecycleOwner) {
+        articleViewModel.articleList.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    with(binding){
-                    txtNoData.visibility = View.GONE
-                    adapter.updateData(it.data?.results ?: listOf())
-                    recArticle.visibility = View.VISIBLE
-                    progressbar.visibility = View.GONE
+                    with(binding) {
+                        txtNoData.showOrGone(false)
+                        adapter.differ.submitList(it.data?.results as List<Result>)
+                        recArticle.showOrGone(true)
+                        progressbar.showOrGone(false)
                     }
                 }
                 Status.LOADING -> {
                     with(binding) {
-                        progressbar.visibility = View.VISIBLE
+                        progressbar.showOrGone(true)
                     }
                 }
                 Status.ERROR -> {
                     //Handle Error
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                     with(binding) {
-                        progressbar.visibility = View.GONE
+                        progressbar.showOrGone(false)
                     }
                 }
             }

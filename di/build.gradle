@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    def retrofit = '2.9.0'
     // Networking
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"

@@ -1,7 +1,6 @@
 package com.android.techtest.ui.activity
 
 import android.os.Bundle
-import android.os.StrictMode
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -18,12 +17,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        StrictMode.setVmPolicy(
-            StrictMode.VmPolicy.Builder()
-                .detectLeakedClosableObjects()
-                .penaltyLog()
-                .build()
-        )
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setSupportActionBar(binding.toolBar)

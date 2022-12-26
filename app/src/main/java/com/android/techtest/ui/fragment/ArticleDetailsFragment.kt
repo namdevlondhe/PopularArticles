@@ -2,19 +2,18 @@ package com.android.techtest.ui.fragment
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.android.techtest.data.entities.Result
 import com.android.techtest.databinding.FragmentArticleDetailsBinding
-import com.android.techtest.domain.usecases.GetArticleUseCases
-import com.android.techtest.viewmodel.ArticleViewModel
+import com.android.techtest.util.Constants.KEY_DETAIL_DATA
 
 class ArticleDetailsFragment : Fragment() {
-
-    private lateinit var viewModel: ArticleViewModel
 
     private lateinit var binding: FragmentArticleDetailsBinding
 
@@ -22,29 +21,33 @@ class ArticleDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentArticleDetailsBinding.inflate(inflater, container, false)
+    ): View = FragmentArticleDetailsBinding.inflate(
+        inflater,
+        container,
+        false
+    ).also {
+        binding = it
+    }.root
 
-        return binding.root
-    }
-
+    @RequiresApi(33)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = requireActivity().run {
-            ViewModelProvider(
-                this,
-                ArticleViewModel.Factory(GetArticleUseCases())
-            )[ArticleViewModel::class.java]
-        }
-        binding.data = viewModel.dataItem
+        getData()
         setClickable()
+    }
 
+    private fun getData() {
+        binding.data = if (Build.VERSION.SDK_INT >= 33) {
+            arguments?.getParcelable(KEY_DETAIL_DATA, Result::class.java)
+        } else {
+            arguments?.getParcelable(KEY_DETAIL_DATA)
+        }
     }
 
     private fun setClickable() {
         with(binding) {
             txtReadMore.setOnClickListener {
-                Intent(Intent.ACTION_VIEW, Uri.parse(viewModel.dataItem.url)).apply {
+                Intent(Intent.ACTION_VIEW, Uri.parse(binding.data?.url)).apply {
                     startActivity(this)
                 }
             }

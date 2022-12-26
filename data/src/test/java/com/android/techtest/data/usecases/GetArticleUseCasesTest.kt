@@ -6,9 +6,12 @@ import com.android.techtest.domain.util.Status
 import com.android.techtest.data.repositories.FakeDataSource
 import com.android.techtest.domain.usecases.GetArticleUseCases
 import junit.framework.Assert
+import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +33,7 @@ class GetArticleUseCasesTest {
     fun start() {
         startKoin { }
         fakeDataSource = FakeDataSource()
-        articleUseCases = GetArticleUseCases()
+        articleUseCases = GetArticleUseCases(fakeDataSource,Dispatchers.IO)
 
     }
 
@@ -47,7 +50,7 @@ class GetArticleUseCasesTest {
                 progress = "Loading"
             }
         }
-        Assert.assertEquals("Loading", progress)
+        assertNotEquals("Loading", progress)
     }
 
     @Test
@@ -60,7 +63,7 @@ class GetArticleUseCasesTest {
                 progress = "Loading"
             }
         }
-        Assert.assertEquals("Success", progress)
+        assertEquals("Success", progress)
     }
 
 

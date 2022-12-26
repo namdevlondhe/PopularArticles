@@ -1,9 +1,10 @@
 package com.android.techtest
 
 import android.app.Application
+import com.android.techtest.data.di.appDadaModules
+import com.android.techtest.di.appDomainApiModule
+import com.android.techtest.di.appDomainUseCasesModule
 import com.android.techtest.di.appModule
-import com.android.techtest.di.applicationModule
-import com.android.techtest.di.useCasesModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -14,7 +15,14 @@ class ArticleApplication : Application() {
         // Start Koin
         startKoin{
             androidContext(this@ArticleApplication)
-            modules(listOf(applicationModule, appModule, useCasesModule))
+            modules(
+                listOf(
+                    appModule,
+                    appDomainApiModule,
+                    appDomainUseCasesModule,
+                    appDadaModules
+                )
+            )
         }
     }
 }

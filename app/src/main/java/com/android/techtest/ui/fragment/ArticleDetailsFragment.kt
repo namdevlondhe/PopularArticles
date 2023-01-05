@@ -50,7 +50,7 @@ class ArticleDetailsFragment : Fragment() {
                 txtByName.text = data.byline
                 txtDate.text = data.publishedDate
                 txtDescription.text = data.abstract
-                ArticleView.loadImage(imgBanner,data.media)
+                ArticleView.loadImage(imgBanner,data.media[0].mediaMetadata[0].url)
                 txtReadMore.setOnClickListener {
                     Intent(Intent.ACTION_VIEW, Uri.parse(data.url)).apply {
                         startActivity(this)

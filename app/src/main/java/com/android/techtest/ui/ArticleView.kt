@@ -9,10 +9,10 @@ import com.bumptech.glide.Glide
 object ArticleView {
 
     @BindingAdapter("app:imageUrl")
-    @JvmStatic fun loadImage(view: ImageView, list: List<MediaCharacter>) {
-        if(list.isNotEmpty() && list[0].mediaMetadata.isNotEmpty()){
+    @JvmStatic fun loadImage(view: ImageView, url: String) {
+        if(url.isNotEmpty()){
             Glide.with(view.context)
-                .load(Uri.parse(list[0].mediaMetadata[list[0].mediaMetadata.size-1].url))
+                .load(Uri.parse(url))
                 .into(view)
         }
     }

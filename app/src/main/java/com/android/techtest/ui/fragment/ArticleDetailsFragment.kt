@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.android.techtest.databinding.FragmentArticleDetailsBinding
 import com.android.techtest.domain.entities.ResultCharacter
+import com.android.techtest.entities.ResultData
 import com.android.techtest.ui.ArticleView
 import com.android.techtest.ui.fragment.MostPopularArticleListFragment.Companion.KEY_DETAIL_DATA
 
@@ -39,7 +40,7 @@ class ArticleDetailsFragment : Fragment() {
     @Suppress("DEPRECATION")
     private fun getData() {
         val data = if (Build.VERSION.SDK_INT >= 33) {
-            requireArguments().getParcelable(KEY_DETAIL_DATA, ResultCharacter::class.java)
+            requireArguments().getParcelable(KEY_DETAIL_DATA, ResultData::class.java)
         } else {
             requireArguments().getParcelable(KEY_DETAIL_DATA)
         }

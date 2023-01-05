@@ -11,7 +11,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.techtest.R
 import com.android.techtest.databinding.FragmentMostPopulerArticleListBinding
-import com.android.techtest.domain.util.Status
+import com.android.techtest.domain.util.Resource
 import com.android.techtest.ui.adapter.ArticleListAdapter
 import com.android.techtest.util.showOrGone
 import com.android.techtest.viewmodel.ArticleViewModel
@@ -45,8 +45,9 @@ class MostPopularArticleListFragment : Fragment() {
         adapter = ArticleListAdapter()
         with(binding) {
             recArticle.adapter = adapter
-            val layoutManager = LinearLayoutManager(context).apply {
-                orientation = LinearLayoutManager.VERTICAL
+            val layoutManager = LinearLayoutManager(context).let {
+                it.orientation = LinearLayoutManager.VERTICAL
+                it
             }
             recArticle.layoutManager = layoutManager
         }
@@ -67,19 +68,19 @@ class MostPopularArticleListFragment : Fragment() {
 
     private fun setObserver() {
         articleViewModel.articleList.observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
+            when (it) {
+                is Resource.Success -> {
                     with(binding) {
                         txtNoData.showOrGone(false)
-                        adapter.differ.submitList(it.data?.results)
+                        adapter.differ.submitList(it.data.results)
                         recArticle.showOrGone(true)
                         progressbar.showOrGone(false)
                     }
                 }
-                Status.LOADING -> {
+                is Resource.Loading -> {
                         binding.progressbar.showOrGone(true)
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     //Handle Error
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                         binding.progressbar.showOrGone(false)

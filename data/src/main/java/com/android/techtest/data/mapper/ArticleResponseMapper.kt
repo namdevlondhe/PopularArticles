@@ -13,8 +13,8 @@ class ArticleResponseMapper : BaseMapperRepository<ArticleResponse, ArticleChara
             type.results.map { result ->
                 ResultCharacter(
                     result.abstract,
-                    result.adxKeywords,
-                    result.assetId,
+                    result.byline,
+                    result.id,
                     result.media.map {
                         MediaCharacter(
                             it.mediaMetadata.map { metadataMapper ->

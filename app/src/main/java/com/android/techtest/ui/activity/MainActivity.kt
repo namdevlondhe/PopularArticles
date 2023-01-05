@@ -1,6 +1,7 @@
 package com.android.techtest.ui.activity
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //set retain after activity destroy
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp()
     }
@@ -41,5 +44,9 @@ class MainActivity : AppCompatActivity() {
             }
             else -> return navController.navigateUp()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
     }
 }

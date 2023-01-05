@@ -6,18 +6,18 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.android.techtest.R
 import com.android.techtest.databinding.ListItemArticalListBinding
-import com.android.techtest.domain.entities.ResultCharacter
+import com.android.techtest.entities.ResultData
 import com.bumptech.glide.Glide
 
 class ArticleViewHolder(
     parent: View,
-    private val onItemClick: ((ResultCharacter) -> Unit)?
+    private val onItemClick: ((ResultData) -> Unit)?
 ) : RecyclerView.ViewHolder(parent) {
 
     private val binding = ListItemArticalListBinding.bind(parent)
 
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
-    fun bindTo(item: ResultCharacter) {
+    fun bindTo(item: ResultData) {
         with(binding) {
             txtTitle.text = item.title
             txtByLine.text = item.byline

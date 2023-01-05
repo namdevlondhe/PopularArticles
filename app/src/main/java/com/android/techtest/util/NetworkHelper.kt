@@ -1,4 +1,4 @@
-package com.android.techtest.data.util
+package com.android.techtest.util
 
 import android.content.Context
 import android.net.ConnectivityManager

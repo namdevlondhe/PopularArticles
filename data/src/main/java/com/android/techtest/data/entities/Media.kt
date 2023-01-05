@@ -1,10 +1,7 @@
 package com.android.techtest.data.entities
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Media(
     @SerializedName("approved_for_syndication")
     var approvedForSyndication: Int,
@@ -18,4 +15,4 @@ data class Media(
     var subtype: String,
     @SerializedName("type")
     var type: String
-) : Parcelable
+)

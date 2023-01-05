@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.techtest.R
-import com.android.techtest.data.entities.Result
+import com.android.techtest.domain.entities.ResultCharacter
 
 class ArticleListAdapter : RecyclerView.Adapter<ArticleViewHolder>() {
 
-    var onItemClick: ((Result) -> Unit)? = null
+    var onItemClick: ((ResultCharacter) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ArticleViewHolder(
@@ -28,12 +28,12 @@ class ArticleListAdapter : RecyclerView.Adapter<ArticleViewHolder>() {
 
     override fun getItemCount() = differ.currentList.size
 
-    private val differCallback = object : DiffUtil.ItemCallback<Result>() {
-        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean =
+    private val differCallback = object : DiffUtil.ItemCallback<ResultCharacter>() {
+        override fun areItemsTheSame(oldItem: ResultCharacter, newItem: ResultCharacter): Boolean =
             oldItem.id == newItem.id
 
         @SuppressLint("DiffUtilEquals")
-        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean =
+        override fun areContentsTheSame(oldItem: ResultCharacter, newItem: ResultCharacter): Boolean =
             oldItem == newItem
 
     }

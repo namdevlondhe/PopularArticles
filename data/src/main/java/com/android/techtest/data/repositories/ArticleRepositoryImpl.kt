@@ -1,5 +1,6 @@
 package com.android.techtest.data.repositories
 
+import com.android.techtest.data.mapper.ArticleResponseMapper
 import com.android.techtest.data.service.api.ApiService
 import com.android.techtest.data.util.NetworkHelper
 import com.android.techtest.domain.entities.ArticleCharacter
@@ -8,20 +9,16 @@ import com.android.techtest.domain.util.Resource
 
 class ArticleRepositoryImpl(
     private val apiService: ApiService,
-    private val mNetworkHelper: NetworkHelper
+    private val networkHelper: NetworkHelper,
+    private val responseMapper: ArticleResponseMapper = ArticleResponseMapper()
 ) : ArticleRepository {
 
     override suspend fun getArticleList(period: Int): Resource<ArticleCharacter> {
-        return if (mNetworkHelper.isNetworkConnected()) {
+        return if (networkHelper.isNetworkConnected()) {
             val response = apiService.getArticleList(period).takeIf { it.isSuccessful }
             response?.body()?.let { resultResponse ->
                 Resource.success(
-                    ArticleCharacter(
-                        resultResponse.copyright,
-                        resultResponse.numResults,
-                        resultResponse.results,
-                        resultResponse.status
-                    )
+                    responseMapper.transform(resultResponse)
                 )
             } ?: Resource.error(response?.errorBody().toString(), null)
         } else {

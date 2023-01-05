@@ -15,5 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "MostPopularArticles"
 include ':app'
 include ':data'
-include ':di'
 include ':domain'

@@ -1,11 +1,7 @@
 package com.android.techtest.data.entities
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 
-@Parcelize
 data class Result(
     @SerializedName("abstract")
     var abstract: String,
@@ -49,4 +45,4 @@ data class Result(
     var uri: String,
     @SerializedName("url")
     var url: String
-): Parcelable
+)

@@ -9,9 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.android.techtest.data.entities.Result
 import com.android.techtest.databinding.FragmentArticleDetailsBinding
-import com.android.techtest.util.Constants.KEY_DETAIL_DATA
+import com.android.techtest.domain.entities.ResultCharacter
+import com.android.techtest.ui.ArticleView
+import com.android.techtest.ui.fragment.MostPopularArticleListFragment.Companion.KEY_DETAIL_DATA
 
 class ArticleDetailsFragment : Fragment() {
 
@@ -33,22 +34,27 @@ class ArticleDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getData()
-        setClickable()
     }
 
+    @Suppress("DEPRECATION")
     private fun getData() {
-        binding.data = if (Build.VERSION.SDK_INT >= 33) {
-            arguments?.getParcelable(KEY_DETAIL_DATA, Result::class.java)
+        val data = if (Build.VERSION.SDK_INT >= 33) {
+            requireArguments().getParcelable(KEY_DETAIL_DATA, ResultCharacter::class.java)
         } else {
-            arguments?.getParcelable(KEY_DETAIL_DATA)
+            requireArguments().getParcelable(KEY_DETAIL_DATA)
         }
-    }
 
-    private fun setClickable() {
         with(binding) {
-            txtReadMore.setOnClickListener {
-                Intent(Intent.ACTION_VIEW, Uri.parse(binding.data?.url)).apply {
-                    startActivity(this)
+            data?.let {
+                txtTitle.text = data.title
+                txtByName.text = data.byline
+                txtDate.text = data.publishedDate
+                txtDescription.text = data.abstract
+                ArticleView.loadImage(imgBanner,data.media)
+                txtReadMore.setOnClickListener {
+                    Intent(Intent.ACTION_VIEW, Uri.parse(data.url)).apply {
+                        startActivity(this)
+                    }
                 }
             }
         }

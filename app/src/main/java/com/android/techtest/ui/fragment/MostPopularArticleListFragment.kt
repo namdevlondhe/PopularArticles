@@ -5,16 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.techtest.R
-import com.android.techtest.data.entities.Result
 import com.android.techtest.databinding.FragmentMostPopulerArticleListBinding
 import com.android.techtest.domain.util.Status
 import com.android.techtest.ui.adapter.ArticleListAdapter
-import com.android.techtest.util.Constants.KEY_DETAIL_DATA
-import com.android.techtest.util.ViewUtils.showOrGone
+import com.android.techtest.util.showOrGone
 import com.android.techtest.viewmodel.ArticleViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -53,12 +52,10 @@ class MostPopularArticleListFragment : Fragment() {
         }
 
         adapter.onItemClick = { resultItem ->
-            val bundle = Bundle()
-            bundle.putParcelable(KEY_DETAIL_DATA, resultItem)
             Navigation.findNavController(binding.recArticle)
                 .navigate(
                     R.id.action_mostPopulerArticleListFragment_to_articleDetailsFragment,
-                    bundle
+                    bundleOf(Pair(KEY_DETAIL_DATA, resultItem))
                 )
         }
     }
@@ -74,25 +71,24 @@ class MostPopularArticleListFragment : Fragment() {
                 Status.SUCCESS -> {
                     with(binding) {
                         txtNoData.showOrGone(false)
-                        adapter.differ.submitList(it.data?.results as List<Result>)
+                        adapter.differ.submitList(it.data?.results)
                         recArticle.showOrGone(true)
                         progressbar.showOrGone(false)
                     }
                 }
                 Status.LOADING -> {
-                    with(binding) {
-                        progressbar.showOrGone(true)
-                    }
+                        binding.progressbar.showOrGone(true)
                 }
                 Status.ERROR -> {
                     //Handle Error
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-                    with(binding) {
-                        progressbar.showOrGone(false)
-                    }
+                        binding.progressbar.showOrGone(false)
                 }
             }
         }
     }
 
+    companion object{
+        const val KEY_DETAIL_DATA = "KEY_DETAIL_DATA"
+    }
 }

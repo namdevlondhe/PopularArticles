@@ -17,5 +17,14 @@ data class Resource<out T>(var status: Status, val data: T?, var message: String
         }
 
     }
-
 }
+
+/*sealed class Resource<T>{
+
+    data class Success<T>(val status: Status = Status.SUCCESS, val data:T): Resource<T>()
+
+    data class Error< T> (val status: Status = Status.ERROR, val message:String): Resource<T>()
+
+    data class Loading(val status: Status = Status.LOADING):Resource<Nothing>()
+
+}*/

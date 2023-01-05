@@ -2,8 +2,7 @@ package com.android.techtest
 
 import android.app.Application
 import com.android.techtest.data.di.appDadaModules
-import com.android.techtest.di.appDomainApiModule
-import com.android.techtest.di.appDomainUseCasesModule
+import com.android.techtest.domain.di.appDomainModule
 import com.android.techtest.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -18,8 +17,7 @@ class ArticleApplication : Application() {
             modules(
                 listOf(
                     appModule,
-                    appDomainApiModule,
-                    appDomainUseCasesModule,
+                    appDomainModule,
                     appDadaModules
                 )
             )

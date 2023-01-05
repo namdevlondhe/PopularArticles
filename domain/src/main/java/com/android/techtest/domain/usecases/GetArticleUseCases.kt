@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-open class GetArticleUseCases(
+class GetArticleUseCases(
     private val articleRepository: ArticleRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {

@@ -1,10 +1,30 @@
 package com.android.techtest.domain.entities
-const val NOT_FOUND = "NOT FOUND"
-const val DEFAULT_ID = 0
 
-class ArticleCharacter(
-    var copyright: String = NOT_FOUND,
-    var numResults: Int = DEFAULT_ID,
-    var results: List<Any>,
-    var status: String = NOT_FOUND
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+data class ArticleCharacter(
+    var results: List<ResultCharacter>
 )
+
+@Parcelize
+data class ResultCharacter(
+    var abstract: String,
+    var byline: String,
+    var id: Long,
+    var media: List<MediaCharacter>,
+    var publishedDate: String,
+    var section: String,
+    var title: String,
+    var url: String,
+) : Parcelable
+
+@Parcelize
+data class MediaCharacter(
+    var mediaMetadata: List<MediaMetadataCharacter>
+) : Parcelable
+
+@Parcelize
+data class MediaMetadataCharacter(
+    var url: String,
+) : Parcelable

@@ -1,14 +1,15 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
 }
 
 android {
-    compileSdk 32
+    compileSdk targetSdkVersion
 
     defaultConfig {
-        minSdk 21
-        targetSdk 32
+        minSdk minSdkVersion
+        targetSdk targetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -30,21 +31,12 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.9.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation "androidx.core:core-ktx:$core_ktx"
+    implementation "com.google.code.gson:gson:$gson"
     implementation "javax.inject:javax.inject:1"
-    // optional - Test helpers for LiveData
-    testImplementation("androidx.arch.core:core-testing:$arch_version")
-    //Mockk
-    testImplementation 'io.mockk:mockk:1.12.5'
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    // testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines")
     //koin
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-navigation:$koin_version"

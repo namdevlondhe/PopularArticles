@@ -16,6 +16,6 @@ val appModule = module {
     }
 
     single(named("MainDispatcher")) {
-        Dispatchers.IO
+        Dispatchers.Main
     }
 }

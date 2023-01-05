@@ -23,9 +23,9 @@ class ArticleResponseMapper : BaseMapperRepository<ArticleResponse, ArticleChara
                                 )
                             },
                         ) },
-                    result.nytdsection,
                     result.publishedDate,
                     result.section,
+                    result.title,
                     result.url
                 )
             })

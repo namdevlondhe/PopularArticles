@@ -4,27 +4,27 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 data class ArticleData(
-    var results: List<ResultData>
+    val results: List<ResultData>
 )
 
 @Parcelize
 data class ResultData(
-    var abstract: String,
-    var byline: String,
-    var id: Long,
-    var media: List<MediaData>,
-    var publishedDate: String,
-    var section: String,
-    var title: String,
-    var url: String,
+    val abstract: String,
+    val byline: String,
+    val id: Long,
+    val media: List<MediaData>,
+    val publishedDate: String,
+    val section: String,
+    val title: String,
+    val url: String,
 ) : Parcelable
 
 @Parcelize
 data class MediaData(
-    var mediaMetadata: List<MediaMetadataData>
+    val mediaMetadata: List<MediaMetadataData>
 ) : Parcelable
 
 @Parcelize
 data class MediaMetadataData(
-    var url: String,
+    val url: String,
 ) : Parcelable

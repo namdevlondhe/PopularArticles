@@ -2,10 +2,8 @@ package com.android.techtest.data.usecases
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.techtest.data.CoroutinesTestRule
-import com.android.techtest.domain.util.Status
 import com.android.techtest.data.repositories.FakeDataSource
 import com.android.techtest.domain.usecases.GetArticleUseCases
-import junit.framework.Assert
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

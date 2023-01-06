@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class MediaMetadata(
     @SerializedName("format")
-    var format: String,
+    val format: String,
     @SerializedName("height")
-    var height: Int,
+    val height: Int,
     @SerializedName("url")
-    var url: String,
+    val url: String,
     @SerializedName("width")
-    var width: Int
+    val width: Int
 )

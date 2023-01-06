@@ -77,13 +77,13 @@ class MostPopularArticleListFragment : Fragment() {
                         progressbar.showOrGone(false)
                     }
                 }
-                is Resource.Loading -> {
-                        binding.progressbar.showOrGone(true)
-                }
                 is Resource.Error -> {
                     //Handle Error
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                         binding.progressbar.showOrGone(false)
+                }
+                else -> {
+                    binding.progressbar.showOrGone(true)
                 }
             }
         }

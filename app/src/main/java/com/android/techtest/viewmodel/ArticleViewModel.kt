@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.android.techtest.util.NetworkHelper
 import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Resource
-import com.android.techtest.domain.util.Status
 import com.android.techtest.entities.ArticleData
 import com.android.techtest.mapper.ArticleCharacterMapper
 import com.android.techtest.viewmodel.base.BaseViewModel
@@ -28,30 +27,29 @@ class ArticleViewModel @Inject constructor(
         viewModelScope.launch {
             if (networkHelper.isNetworkConnected()) {
                 articleUseCases().onStart {
-                    _articleList.value = Resource.Loading(Status.LOADING)
+
                 }.catch { result ->
                     _articleList.value =
-                        result.message?.let { it1 -> Resource.Error(Status.ERROR, it1) }
+                        result.message?.let { it1 -> Resource.Error(it1) }
                 }.collect { result ->
                     when (result) {
                         is Resource.Success -> {
                             result.data.let {
                                 _articleList.value = Resource.Success(
-                                    Status.SUCCESS,
                                     articleCharacterMapper.transform(it)
                                 )
                             }
                         }
                         is Resource.Error -> {
                             _articleList.value =
-                                result.message.let { it1 -> Resource.Error(Status.ERROR, it1) }
+                                result.message.let { it1 -> Resource.Error(it1) }
                         }
                         else -> {}
                     }
 
                 }
             } else {
-                _articleList.value = Resource.Error(Status.ERROR, "NETWORK_ERROR")
+                _articleList.value = Resource.Error("NETWORK_ERROR")
             }
         }
     }

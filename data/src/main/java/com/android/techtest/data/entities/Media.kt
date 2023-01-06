@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class Media(
     @SerializedName("approved_for_syndication")
-    var approvedForSyndication: Int,
+    val approvedForSyndication: Int,
     @SerializedName("caption")
-    var caption: String,
+    val caption: String,
     @SerializedName("copyright")
-    var copyright: String,
+    val copyright: String,
     @SerializedName("media-metadata")
-    var mediaMetadata: ArrayList<MediaMetadata>,
+    val mediaMetadata: ArrayList<MediaMetadata>,
     @SerializedName("subtype")
-    var subtype: String,
+    val subtype: String,
     @SerializedName("type")
-    var type: String
+    val type: String
 )

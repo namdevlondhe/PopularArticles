@@ -4,45 +4,45 @@ import com.google.gson.annotations.SerializedName
 
 data class Result(
     @SerializedName("abstract")
-    var abstract: String,
+    val abstract: String,
     @SerializedName("adx_keywords")
-    var adxKeywords: String,
+    val adxKeywords: String,
     @SerializedName("asset_id")
-    var assetId: Long,
+    val assetId: Long,
     @SerializedName("byline")
-    var byline: String,
+    val byline: String,
     @SerializedName("des_facet")
-    var desFacet: List<String>,
+    val desFacet: List<String>,
     @SerializedName("eta_id")
-    var etaId: Int,
+    val etaId: Int,
     @SerializedName("geo_facet")
-    var geoFacet: List<String>,
+    val geoFacet: List<String>,
     @SerializedName("id")
-    var id: Long,
+    val id: Long,
     @SerializedName("media")
-    var media: List<Media>,
+    val media: List<Media>,
     @SerializedName("nytdsection")
-    var nytdsection: String,
+    val nytdsection: String,
     @SerializedName("org_facet")
-    var orgFacet: List<String>,
+    val orgFacet: List<String>,
     @SerializedName("per_facet")
-    var perFacet: List<String>,
+    val perFacet: List<String>,
     @SerializedName("published_date")
-    var publishedDate: String,
+    val publishedDate: String,
     @SerializedName("section")
-    var section: String,
+    val section: String,
     @SerializedName("source")
-    var source: String,
+    val source: String,
     @SerializedName("subsection")
-    var subsection: String,
+    val subsection: String,
     @SerializedName("title")
-    var title: String,
+    val title: String,
     @SerializedName("type")
-    var type: String,
+    val type: String,
     @SerializedName("updated")
-    var updated: String,
+    val updated: String,
     @SerializedName("uri")
-    var uri: String,
+    val uri: String,
     @SerializedName("url")
-    var url: String
+    val url: String
 )

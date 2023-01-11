@@ -20,6 +20,8 @@ API used - https://api.nytimes.com/
 8. Kotlin Coroutines.
 9. Notification.
 10. Mockito.
+11. Mockk.
+12. Shared Flow.
 <br>
 
 ## The app has following packages:

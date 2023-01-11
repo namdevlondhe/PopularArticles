@@ -19,18 +19,20 @@ class ArticleViewHolder(
     @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     fun bindTo(item: ResultData) {
         with(binding) {
-            txtTitle.text = item.title
-            txtByLine.text = item.byline
-            txtDate.text = " " + item.publishedDate
-            txtSource.text = item.section
-            if (item.media.isNotEmpty() && item.media[0].mediaMetadata.isNotEmpty()) {
-                Glide.with(imageView.context)
-                    .load(Uri.parse(item.media[0].mediaMetadata[0].url))
-                    .placeholder(imageView.context.getDrawable(R.drawable.ic_launcher_foreground))
-                    .into(imageView)
-            }
-            container.setOnClickListener {
-                onItemClick?.invoke(item)
+            item.run {
+                txtTitle.text = title
+                txtByLine.text = byline
+                txtDate.text = " " + publishedDate
+                txtSource.text = section
+                if (media.isNotEmpty() && media[0].mediaMetadata.isNotEmpty()) {
+                    Glide.with(imageView.context)
+                        .load(Uri.parse(media[0].mediaMetadata[0].url))
+                        .placeholder(imageView.context.getDrawable(R.drawable.ic_launcher_foreground))
+                        .into(imageView)
+                }
+                container.setOnClickListener {
+                    onItemClick?.invoke(this)
+                }
             }
         }
     }

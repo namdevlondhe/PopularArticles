@@ -2,6 +2,8 @@ package com.android.techtest.mapper
 
 import com.android.techtest.data.mapper.BaseMapperRepository
 import com.android.techtest.domain.entities.ArticleCharacter
+import com.android.techtest.domain.entities.MediaCharacter
+import com.android.techtest.domain.entities.MediaMetadataCharacter
 import com.android.techtest.entities.ArticleData
 import com.android.techtest.entities.MediaData
 import com.android.techtest.entities.MediaMetadataData
@@ -16,19 +18,17 @@ class ArticleCharacterMapper : BaseMapperRepository<ArticleCharacter, ArticleDat
                     result.abstract,
                     result.byline,
                     result.id,
-                    result.media.map {
-                        MediaData(
-                            it.mediaMetadata.map { metadataMapper ->
-                                MediaMetadataData(
-                                    metadataMapper.url,
-                                )
-                            },
-                        )
-                    },
+                    transformToMedia(result.media),
                     result.publishedDate,
                     result.section,
                     result.title,
                     result.url
                 )
             })
+
+    private fun transformToMedia(type: List<MediaCharacter>): List<MediaData> =
+        type.map { MediaData(transformToMediaMetadata(it.mediaMetadata)) }
+
+    private fun transformToMediaMetadata(type: List<MediaMetadataCharacter>): List<MediaMetadataData> =
+        type.map { MediaMetadataData(it.url) }
 }

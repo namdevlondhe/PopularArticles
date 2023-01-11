@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.techtest.data.CoroutinesTestRule
 import com.android.techtest.data.repositories.FakeDataSource
 import com.android.techtest.domain.usecases.GetArticleUseCases
+import com.android.techtest.domain.util.Resource
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,7 +45,7 @@ class GetArticleUseCasesTest {
     fun test_articl_use_case_returns_loading() = runBlocking {
         var progress = ""
         articleUseCases.invoke(7).collect {
-            if (it.status == Status.LOADING) {
+            if (it is Resource.Loading) {
                 progress = "Loading"
             }
         }
@@ -55,9 +56,9 @@ class GetArticleUseCasesTest {
     fun test_article_use_case_returns_expected_value() = runBlocking {
         var progress = ""
         articleUseCases.invoke(0).collect {
-            if (it.status == Status.SUCCESS) {
+            if (it is Resource.Success) {
                 progress = "Success"
-            } else if (it.status == Status.LOADING) {
+            } else if (it is Resource.Loading) {
                 progress = "Loading"
             }
         }

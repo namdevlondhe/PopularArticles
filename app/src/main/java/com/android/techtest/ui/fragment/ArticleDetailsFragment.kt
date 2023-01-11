@@ -46,14 +46,14 @@ class ArticleDetailsFragment : Fragment() {
         }
 
         with(binding) {
-            data?.let {
-                txtTitle.text = data.title
-                txtByName.text = data.byline
-                txtDate.text = data.publishedDate
-                txtDescription.text = data.abstract
-                ArticleView.loadImage(imgBanner,data.media[0].mediaMetadata[0].url)
+            data?.run {
+                txtTitle.text = title
+                txtByName.text = byline
+                txtDate.text = publishedDate
+                txtDescription.text = abstract
+                ArticleView.loadImage(imgBanner, media[0].mediaMetadata[0].url)
                 txtReadMore.setOnClickListener {
-                    Intent(Intent.ACTION_VIEW, Uri.parse(data.url)).apply {
+                    Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
                         startActivity(this)
                     }
                 }

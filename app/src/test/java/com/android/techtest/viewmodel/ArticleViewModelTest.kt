@@ -4,7 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.techtest.domain.entities.ArticleCharacter
 import com.android.techtest.domain.usecases.GetArticleUseCases
 import com.android.techtest.domain.util.Resource
+import com.android.techtest.mapper.ArticleCharacterMapper
 import com.android.techtest.util.MainCoroutineRule
+import com.android.techtest.util.NetworkHelper
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -14,6 +16,7 @@ import junit.framework.Assert
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -32,6 +35,8 @@ class ArticleViewModelTest {
     private lateinit var viewModel: ArticleViewModel
 
     private val articleUseCases = mockk<GetArticleUseCases>(relaxed = true)
+    private val mapper = mockk<ArticleCharacterMapper>()
+    private val networkHelper = mockk<NetworkHelper>()
 
     @ExperimentalCoroutinesApi
     private val testDispatcher = TestCoroutineDispatcher()
@@ -63,22 +68,23 @@ class ArticleViewModelTest {
     fun `get Article List`() = runBlockingTest {
         val response = mockk<Resource<ArticleCharacter>>(relaxed = true)
         launch {
-            viewModel = ArticleViewModel(articleUseCases)
+            viewModel = ArticleViewModel(articleUseCases, mapper, networkHelper)
             //1- Mock calls
             coEvery {
                 viewModel.fetchArticleList()
                 articleUseCases.invoke(7)
             } returns flow {
-                emit(Resource.success(response.data!!))
-
+                if (response is Resource.Success) {
+                    emit(Resource.Success(response.data))
+                }
                 //2-Call
 
                 //active observer for livedata
-                viewModel.articleList.observeForever {}
-
-                //3-verify
-                val data = viewModel.articleList.value
-                assertEquals(data, response)
+                viewModel.articleList.collect {
+                    //3-verify
+                    val data = viewModel.articleList.value
+                    assertEquals(data, response)
+                }
             }
         }
     }
@@ -86,25 +92,29 @@ class ArticleViewModelTest {
     @Test
     fun `get Article Empty List`(): Unit = runBlocking {
         val response = mockk<Resource<ArticleCharacter>>()
-        viewModel = ArticleViewModel(articleUseCases)
+        viewModel = ArticleViewModel(articleUseCases, mapper, networkHelper)
         //1- Mock calls
         launch {
             coEvery {
                 articleUseCases.invoke(0)
             } returns flow {
-                emit(Resource.success(response.data!!))
+                if (response is Resource.Success) {
+                    emit(Resource.Success(response.data))
+                }
 
                 //2-Call
                 viewModel.fetchArticleList()
 
                 //active observer for livedata
-                viewModel.articleList.observeForever {}
-
-                //3-verify
-                val data = viewModel.articleList.value
-                val isEmptyList = data?.data?.results.isNullOrEmpty()
-                assertEquals(data, response)
-                Assert.assertTrue(isEmptyList)
+                viewModel.articleList.collect {
+                    //3-verify
+                    if (it is Resource.Success) {
+                        val data = viewModel.articleList.value
+                        val isEmptyList = it.data.results.isNullOrEmpty()
+                        assertEquals(data, response)
+                        Assert.assertTrue(isEmptyList)
+                    }
+                }
             }
         }
     }
@@ -112,22 +122,25 @@ class ArticleViewModelTest {
     @Test
     fun `get Article Error`(): Unit = runBlocking {
         val error = mockk<Resource<ArticleCharacter>>()
-        viewModel = ArticleViewModel(articleUseCases)
+        viewModel = ArticleViewModel(articleUseCases, mapper, networkHelper)
         //1- Mock calls
         launch {
             coEvery {
                 articleUseCases.invoke(0)
             } returns flow {
-                emit(Resource.error(error.message!!, null))
+                if (error is Resource.Error) {
+                    emit(Resource.Error(error.message))
+                }
 
                 //2-Call
                 viewModel.fetchArticleList()
                 //active observer for livedata
-                viewModel.articleList.observeForever {}
-
-                //3-verify
-                val data = viewModel.articleList.value
-                assertEquals(data?.message, null)
+                viewModel.articleList.collect {
+                    //3-verify
+                    val data = viewModel.articleList.value
+                    if (data is Resource.Error)
+                        assertEquals(data.message, null)
+                }
             }
         }
     }

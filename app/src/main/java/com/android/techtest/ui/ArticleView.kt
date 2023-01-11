@@ -16,5 +16,4 @@ object ArticleView {
                 .into(view)
         }
     }
-
 }

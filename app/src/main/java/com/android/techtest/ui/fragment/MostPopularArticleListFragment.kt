@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.techtest.R
@@ -15,6 +16,9 @@ import com.android.techtest.domain.util.Resource
 import com.android.techtest.ui.adapter.ArticleListAdapter
 import com.android.techtest.util.showOrGone
 import com.android.techtest.viewmodel.ArticleViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MostPopularArticleListFragment : Fragment() {
@@ -45,9 +49,8 @@ class MostPopularArticleListFragment : Fragment() {
         adapter = ArticleListAdapter()
         with(binding) {
             recArticle.adapter = adapter
-            val layoutManager = LinearLayoutManager(context).let {
-                it.orientation = LinearLayoutManager.VERTICAL
-                it
+            val layoutManager = LinearLayoutManager(context).apply {
+                orientation = LinearLayoutManager.VERTICAL
             }
             recArticle.layoutManager = layoutManager
         }
@@ -66,30 +69,37 @@ class MostPopularArticleListFragment : Fragment() {
         setObserver()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     private fun setObserver() {
-        articleViewModel.articleList.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    with(binding) {
-                        txtNoData.showOrGone(false)
-                        adapter.differ.submitList(it.data.results)
-                        recArticle.showOrGone(true)
-                        progressbar.showOrGone(false)
+        lifecycle.coroutineScope.launch {
+            articleViewModel.articleList.collect {
+                when (it) {
+                    is Resource.Success -> {
+                        with(binding) {
+                            txtNoData.showOrGone(false)
+                            adapter.differ.submitList(it.data.results)
+                            recArticle.showOrGone(true)
+                            progressbar.showOrGone(false)
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    //Handle Error
-                    Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                    is Resource.Error -> {
+                        //Handle Error
+                        Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                         binding.progressbar.showOrGone(false)
-                }
-                else -> {
-                    binding.progressbar.showOrGone(true)
+                    }
+                    else -> {
+                        binding.progressbar.showOrGone(true)
+                    }
                 }
             }
         }
     }
 
-    companion object{
+    companion object {
         const val KEY_DETAIL_DATA = "KEY_DETAIL_DATA"
     }
 }

@@ -4,8 +4,9 @@ import com.android.techtest.domain.entities.ArticleCharacter
 import com.android.techtest.domain.repositories.ArticleRepository
 import com.android.techtest.domain.util.Resource
 
-class FakeDataSource : ArticleRepository{
+class FakeDataSource : ArticleRepository {
+    private val data: ArticleCharacter = ArticleCharacter(emptyList())
     override suspend fun getArticleList(period: Int): Resource<ArticleCharacter> {
-        return Resource.success(null)
+        return Resource.Success(data)
     }
 }
